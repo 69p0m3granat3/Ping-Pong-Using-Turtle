@@ -2,9 +2,13 @@ import turtle
 
 win = turtle.Screen()
 win.setup(height=600, width=800)
-win.title("Pingpong by Youtube")
+win.title("PINGPONG")
 win.bgcolor("#9933FF")
 win.tracer(0)
+
+# Score
+score_a = 0
+score_b = 0
 
 # Paddle A
 paddle_a = turtle.Turtle()
@@ -31,8 +35,21 @@ ball.speed(0)
 ball.color("#ffff33")
 ball.penup()
 ball.goto(0, 0)
-ball.dx = 0.1
-ball.dy = -0.1
+ball.dx = 0.12
+ball.dy = -0.12
+
+# PEN
+pen = turtle.Turtle()
+pen.speed(0)
+pen.color("#000000")
+pen.penup()
+pen.hideturtle()
+pen.goto(0, 260)
+pen.clear()
+pen.write(f"Player A: {score_a} Player B: {score_b}",
+          align="center", font=("Courier", 24, "normal"))
+
+
 # Functions
 
 
@@ -68,13 +85,34 @@ while True:
     ball.sety(ball.ycor() + ball.dy)
 
     if ball.ycor() > 290:
-        ball.dy = -0.1
+        ball.sety(290)
+        ball.dy *= -1
 
     if ball.ycor() < -290:
-        ball.dy = 0.1
+        ball.sety(-290)
+        ball.dy *= -1
 
     if ball.xcor() > 390:
-        ball.dx = -0.1
+        ball.goto(0, 0)
+        ball.dx *= -1
+        score_a += 1
+        pen.clear()
+        pen.write(f"Player A: {score_a} Player B: {score_b}",
+                  align="center", font=("Courier", 24, "normal"))
 
     if ball.xcor() < -390:
-        ball.dx = 0.1
+        ball.goto(0, 0)
+        ball.dx *= -1
+        score_b += 1
+        pen.clear()
+        pen.write(f"Player A: {score_a} Player B: {score_b}",
+                  align="center", font=("Courier", 24, "normal"))
+
+    # Paddle and ball condition
+    if ball.xcor() > 340 and ball.xcor() < 350 and ball.ycor() < paddle_b.ycor()+40 and ball.ycor() > paddle_b.ycor()-40:
+        ball.setx(340)
+        ball.dx *= -1
+
+    if ball.xcor() < -340 and ball.xcor() > -350 and ball.ycor() < paddle_a.ycor() + 40 and ball.ycor() > paddle_a.ycor()-40:
+        ball.setx(-340)
+        ball.dx *= -1
